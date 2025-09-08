@@ -1,1 +1,5 @@
-body{font-family:sans-serif;background:#0b1020;color:#fff}h1{color:#6ee7ff}
+body{font-family:sans-serif;background:#0b1020;color:#fff;margin:0}
+h1,h2{color:#6ee7ff}.btn{background:#6ee7ff;color:#000;padding:10px 16px;border-radius:6px;text-decoration:none}
+.site-header,.site-footer{padding:10px;background:#12172a;color:#eee}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:#12172a;padding:10px;border-radius:8px}
