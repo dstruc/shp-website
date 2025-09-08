@@ -1,15 +1,41 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Contact — SHP</title><link rel="stylesheet" href="assets/styles.css"><link rel="icon" href="assets/favicon.svg"></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — SelfHealingPower (SHP)</title>
+  {nocache_meta}
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
 <body>
-<header class="site-header"><a class="brand" href="index.html"><img src="assets/logo.svg"><span>SHP</span></a></header>
-<main class="container"><h1>Contact SHP</h1>
-<form action="https://formspree.io/f/your-form-id" method="POST">
-<input type="text" name="name" placeholder="Your Name" required>
-<input type="email" name="_replyto" placeholder="Your Email" required>
-<textarea name="message" placeholder="Message"></textarea>
-<button type="submit" class="btn primary">Send</button>
-</form></main>
-<footer class="site-footer"><p>SHP – Austin, TX</p></footer>
-</body></html>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="SHP logo"><span>SHP</span></a>
+    <nav><a href="index.html#services">Services</a><a href="schedule.html">Schedule</a></nav>
+  </div>
+</header>
+
+<main class="section">
+  <h1>Contact SHP</h1>
+  <p>Questions, partnerships, or event bookings? Send us a note.</p>
+  <form class="card" action="https://formspree.io/f/your-form-id" method="POST" style="max-width:680px">
+    <input type="text" name="name" placeholder="Your Name" required style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0a1020;color:var(--ink);margin:6px 0">
+    <input type="email" name="_replyto" placeholder="Your Email" required style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0a1020;color:var(--ink);margin:6px 0">
+    <input type="tel" name="phone" placeholder="Phone (optional)" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0a1020;color:var(--ink);margin:6px 0">
+    <textarea name="message" rows="6" placeholder="Message" required style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0a1020;color:var(--ink);margin:6px 0"></textarea>
+    <input type="text" name="_gotcha" style="display:none">
+    <input type="hidden" name="_subject" value="New inquiry from SHP website">
+    <button type="submit" class="btn primary">Send Message</button>
+    <p class="muted" style="color:var(--muted)">By submitting, you agree to our <a href="privacy.html">Privacy Policy</a>.</p>
+  </form>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div><strong>SHP — SelfHealingPower</strong></div>
+    <div><a href="privacy.html">Privacy</a></div>
+  </div>
+</footer>
+</body>
+</html>
