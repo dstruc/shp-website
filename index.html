@@ -46,22 +46,30 @@
   </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html">
-      <img src="assets/icon.png" alt="SHP logo"><span>SELF HEALING POWER</span>
-    </a>
-    <nav>
-      <a href="#services">Services</a>
-      <a href="#why">Why SHP</a>
-      <a href="#healthspan">Health & Life Span</a>
-      <a href="#educational">Learn More</a>          <!-- was “Educational” -->
-      <a href="hbot.html" class="btn ghost">What is HBOT?</a>  <!-- NEW -->
-      <a href="contact.html">Contact</a>
-      <a class="btn primary" href="schedule.html">Schedule</a>
-    </nav>
-  </div>
-</header>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.svg" alt="SHP logo" width="30" height="30"><span>SHP</span>
+      </a>
+  
+      <!-- Mobile toggle -->
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+  
+      <!-- Nav links -->
+      <nav id="primary-nav" class="nav-menu">
+        <a href="#services">Services</a>
+        <a href="#why">Why SHP</a>
+        <a href="#healthspan">Health & Life Span</a>
+        <a href="#educational">Learn More</a>
+        <a href="hbot.html" class="btn ghost">What is HBOT?</a>
+        <a href="contact.html">Contact</a>
+        <a class="btn primary" href="schedule.html">Schedule</a>
+      </nav>
+    </div>
+  </header>
+  
 
 <section class="hero hero--bg-carousel" aria-label="SHP hero">
   <div class="hero-carousel" aria-hidden="true">
@@ -293,8 +301,43 @@
   start();
 })();
 </script>
-
-
+<script>
+  /* Mobile nav toggle */
+  (function(){
+    const toggle = document.querySelector('.nav-toggle');
+    const menu   = document.querySelector('#primary-nav');
+    if (!toggle || !menu) return;
+  
+    function open(v){
+      const isOpen = v ?? (toggle.getAttribute('aria-expanded') !== 'true');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      menu.classList.toggle('is-open', isOpen);
+      document.documentElement.classList.toggle('no-scroll', isOpen);
+    }
+  
+    toggle.addEventListener('click', () => open());
+  
+    // Close on link click (nice on mobile)
+    menu.addEventListener('click', e => {
+      const a = e.target.closest('a');
+      if (a) open(false);
+    });
+  
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') open(false);
+    });
+  
+    // Ensure menu closes on resize back to desktop
+    let t;
+    window.addEventListener('resize', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        if (window.innerWidth > 900) open(false);
+      }, 150);
+    });
+  })();
+  </script>
 </body>
 </html>
 

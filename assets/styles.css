@@ -98,3 +98,66 @@ nav a{margin-left:18px;opacity:.9}.btn{display:inline-flex;align-items:center;ga
 .video-card h3 { margin-top: 10px; font-size: 1rem; }
 
 .icon { width:60px; height:60px; margin-bottom:12px; color:#6ee7ff; }
+
+/* ===== Responsive Header / Nav ===== */
+
+/* Base header already in your theme; these are additions/refinements */
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(11,16,32,.75); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; }
+
+/* Toggle button (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  width: 40px; height: 40px;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: transparent; color: var(--ink); cursor: pointer;
+  position: relative;
+}
+.nav-toggle-bar,
+.nav-toggle-bar::before,
+.nav-toggle-bar::after {
+  content: ""; position: absolute; left: 50%; width: 22px; height: 2px;
+  background: currentColor; border-radius: 2px; transform: translateX(-50%);
+  transition: transform .25s ease, opacity .2s ease;
+}
+.nav-toggle-bar { top: 50%; transform: translate(-50%, -50%); }
+.nav-toggle-bar::before { top: -7px; }
+.nav-toggle-bar::after  { top: 7px; }
+
+/* Turn into “X” when open */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar   { transform: translate(-50%, -50%) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar::before { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar::after  { transform: translateX(-50%) rotate(-90deg); top: 0; }
+
+/* Menu container */
+.nav-menu { display: flex; align-items: center; gap: 18px; }
+
+/* --- Mobile layout --- */
+@media (max-width: 900px) {
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+
+  /* stack menu under header, full width */
+  .nav-menu {
+    position: absolute; left: 0; right: 0; top: 100%;
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 12px 16px;
+    background: rgba(11,16,32,.98);
+    border-bottom: 1px solid var(--line);
+    transform: translateY(-8px);
+    max-height: 0; overflow: hidden;
+    transition: max-height .28s ease;
+  }
+  /* Show when open */
+  .nav-menu.is-open { max-height: 420px; } /* enough for all links */
+
+  /* Links grow for touch targets */
+  .nav-menu a { padding: 10px 6px; display: inline-block; }
+
+  /* Make the two buttons full-width on mobile */
+  .nav-menu .btn { width: 100%; justify-content: center; }
+}
+
+/* Small fix for iOS notch safe area (optional) */
+@supports (padding: max(0px)) {
+  .site-header { padding-left: max(0px, env(safe-area-inset-left)); padding-right: max(0px, env(safe-area-inset-right)); }
+}
