@@ -12,6 +12,38 @@
 
   <link rel="icon" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/styles.css">
+
+  <!-- 🔧 Add-on: minimal, namespaced carousel styles -->
+  <style>
+    /* ===== SHP Carousel (namespaced) ===== */
+    .shp-carousel { max-width: 1100px; margin: 0 auto; padding: 40px 20px 16px; }
+    .shp-carousel h2 { margin: 0 0 12px; font-size: 1.8rem; }
+    .shp-carousel-frame {
+      position: relative; border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12); background: #0a1222;
+    }
+    /* 16:9 viewport (JS fallback also provided) */
+    .shp-carousel-viewport { width: 100%; aspect-ratio: 16 / 9; position: relative; }
+    .shp-carousel-track { display: flex; position: absolute; inset: 0; transition: transform .5s ease; will-change: transform; }
+    .shp-carousel-slide { min-width: 100%; position: relative; }
+    .shp-carousel-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; } /* crops to 16:9 */
+    .shp-carousel-caption {
+      position: absolute; left: 12px; bottom: 12px; padding: 8px 10px; border-radius: 10px;
+      background: rgba(0,0,0,.35); backdrop-filter: blur(4px); font-size: .95rem; color: #fff;
+    }
+    .shp-carousel-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      border: none; width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.12); color: #fff; cursor: pointer;
+    }
+    .shp-carousel-arrow:hover { background: rgba(255,255,255,.2); }
+    .shp-carousel-prev { left: 10px; }
+    .shp-carousel-next { right: 10px; }
+    .shp-carousel-dots { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+    .shp-carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: #445; opacity: .9; cursor: pointer; }
+    .shp-carousel-dot.is-active { background: #6ee7ff; }
+    @media (max-width:1000px){ .shp-carousel h2{font-size:1.5rem;} }
+  </style>
 </head>
 <body>
 <header class="site-header">
@@ -28,17 +60,30 @@
   </div>
 </header>
 
-<section class="hero">
+<section class="hero hero--bg-carousel" aria-label="SHP hero">
+  <div class="hero-carousel" aria-hidden="true">
+    <div class="hero-carousel__viewport">
+      <div class="hero-carousel__track">
+        <div class="hero-carousel__slide"><img src="assets/photos/hbot_ext.jpg" alt=""></div>
+        <div class="hero-carousel__slide"><img src="assets/photos/cold_plunge.jpg" alt=""></div>
+        <div class="hero-carousel__slide"><img src="assets/photos/sauna.jpg" alt=""></div>
+        <div class="hero-carousel__slide"><img src="assets/photos/hbot_inside.jpg" alt=""></div>
+      </div>
+    </div>
+    <div class="hero-carousel__scrim"></div>
+  </div>
+
   <div class="hero-inner">
     <div class="kicker">Mobile Wellness • Austin, TX</div>
     <h1>Hyperbaric Wellness<br>that comes to you.</h1>
-    <p>SelfHealingPower (SHP) delivers soft‑chamber HBOT rentals and supervised sessions — plus infrared sauna and cold plunge add‑ons — to homes, offices, gyms, and events.</p>
+    <p>SelfHealingPower (SHP) delivers soft-chamber HBOT rentals and supervised sessions — plus infrared sauna and cold plunge add-ons — to homes, offices, gyms, and events.</p>
     <div class="cta-row">
       <a class="btn primary" href="schedule.html">Schedule (Coming Soon)</a>
       <a class="btn ghost" href="contact.html">Talk to us</a>
     </div>
   </div>
 </section>
+
 
 <section class="trust">
   <div class="trust-inner">
@@ -54,7 +99,7 @@
   <div class="grid-3">
     <article class="card">
       <h3>Wellness Rental</h3>
-      <p>Affordable entry tier for experienced users or budget‑conscious clients.</p>
+      <p>Affordable entry tier for experienced users or budget-conscious clients.</p>
       <ul>
         <li>Mandatory safety video + waiver</li>
         <li>HBOT wellness pressure range</li>
@@ -65,17 +110,17 @@
       <h3>Supervised Session</h3>
       <p>Recommended tier with a trained technician present for the entire session.</p>
       <ul>
-        <li>On‑site monitoring & best practices</li>
-        <li>Ideal for first‑timers</li>
+        <li>On-site monitoring & best practices</li>
+        <li>Ideal for first-timers</li>
         <li>Peace of mind & support</li>
       </ul>
     </article>
     <article class="card">
       <h3>Concierge (Future)</h3>
-      <p>Physician‑supervised tier for clinical use cases & insurance pathways.</p>
+      <p>Physician-supervised tier for clinical use cases & insurance pathways.</p>
       <ul>
         <li>Prescription required</li>
-        <li>Insurance‑ready workflows</li>
+        <li>Insurance-ready workflows</li>
         <li>Corporate & advanced cases</li>
       </ul>
     </article>
@@ -86,7 +131,7 @@
   <div class="row">
     <div>
       <h2>Why SHP?</h2>
-      <p>We bring recovery to you — no commute, no waiting rooms. Our multi‑modality unit lets you combine HBOT with infrared sauna and cold plunge for a complete protocol.</p>
+      <p>We bring recovery to you — no commute, no waiting rooms. Our multi-modality unit lets you combine HBOT with infrared sauna and cold plunge for a complete protocol.</p>
       <ul>
         <li>Mobile convenience across Austin</li>
         <li>Tiered services from rental to supervised</li>
@@ -139,5 +184,65 @@
 </footer>
 
 <script src="assets/script.js"></script>
+
+<!-- 🔧 Optional: you can inline the carousel JS here instead of assets/script.js -->
+<!-- <script>...carousel JS from below...</script> -->
+<script>
+/* ===== SHP Hero Background Carousel (full-bleed, auto, swipe) ===== */
+(function initHeroCarousel(){
+  const root  = document.querySelector('.hero.hero--bg-carousel');
+  if (!root) return;
+
+  const track = root.querySelector('.hero-carousel__track');
+  const slides= Array.from(root.querySelectorAll('.hero-carousel__slide'));
+  if (!track || slides.length === 0) return;
+
+  // Ensure track/slide widths match slide count
+  function sizeTrack(){
+    // Keep the track at 100% width; slides overflow horizontally and we translate by -100% per step.
+    track.style.width = '100%';
+    slides.forEach(s => { s.style.flex = '0 0 100%'; s.style.width = '100%'; });
+  }
+  sizeTrack();
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(sizeTrack, 100);
+  });
+
+  // Motion
+  let i = 0, lock = false, timer;
+  function go(n){
+    i = (n + slides.length) % slides.length;
+    track.style.transform = 'translateX(' + (-i * 100) + '%)';
+  }
+  function step(d){ if(lock) return; lock = true; go(i + d); setTimeout(()=>lock=false, 450); }
+
+  function start(){ stop(); timer = setInterval(()=>step(1), 2500); }
+  function stop(){ if (timer) clearInterval(timer); }
+
+  // Pause when tab is hidden (saves battery & avoids jumps)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  // Pause on hover (desktop)
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+
+  // Touch swipe
+  let sx=0, dx=0;
+  root.addEventListener('touchstart', e => { sx = e.touches[0].clientX; dx = 0; stop(); }, {passive:true});
+  root.addEventListener('touchmove',  e => { dx = e.touches[0].clientX - sx; }, {passive:true});
+  root.addEventListener('touchend',   () => { if (Math.abs(dx) > 50) step(dx > 0 ? -1 : 1); start(); });
+
+  // Kick off
+  go(0);
+  start();
+})();
+</script>
+
+
 </body>
 </html>
+
